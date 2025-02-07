@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { useAuth } from "@/contexts/auth-context"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { getGoogleAuthUrl } from "@/lib/google-auth"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -22,8 +21,9 @@ export default function LoginPage() {
   useEffect(() => {
     const fetchGoogleAuthUrl = async () => {
       try {
-        const url = await getGoogleAuthUrl()
-        setGoogleAuthUrl(url)
+        const response = await fetch('/api/auth/google-url'); // Create an API route to fetch the URL
+        const data = await response.json();
+        setGoogleAuthUrl(data.url);
       } catch (error) {
         console.error("Error fetching Google Auth URL:", error)
         setError("Failed to initialize Google login. Please try again.")
